@@ -1,0 +1,9 @@
+﻿@inherits Layout
+
+<div style="display:flex; flex-direction:row; border:solid blue 3px;">
+    <h1 style="color:blue">Horzontal Layout</h1>
+    @foreach (var child in children)
+    {
+        @child
+    }
+</div>

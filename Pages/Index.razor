@@ -1,0 +1,80 @@
+﻿@page "/"
+
+<Layout @ref=initialComponentHolder>
+    <ChildComponent>
+        <h3 style="padding: 5px;" @onclick=@(() => Console.WriteLine("Hello 1"))>Hello 1!</h3>
+    </ChildComponent>
+    <ChildComponent>
+        <h3 style="padding: 5px;" @onclick=@(() => Console.WriteLine("Hello 2"))>Hello 2!</h3>
+    </ChildComponent>
+    <ChildComponent>
+        <h3 style="padding: 5px;" @onclick=@(() => Console.WriteLine("Hello 3"))>Hello 3!</h3>
+    </ChildComponent>
+</Layout>
+
+<HorizontalLayout @ref=horizontal>
+</HorizontalLayout>
+
+<VerticalLayout @ref=vertical>
+</VerticalLayout>
+
+<button @onclick=MoveFirstFromHorizontalToStartOfVertical>Move First From Horizontal To Start Of Vertical</button>
+<br />
+<button @onclick=MoveFirstFromHorizontalToEndOfVertical>Move First From Horizontal To End Of Vertical</button>
+<br />
+<button @onclick=MoveFirstFromVerticalToStartOfHorizontal>Move First From Vertical To Start Of Horizontal</button>
+<br />
+<button @onclick=MoveFirstFromVerticalToEndOfHorizontal>Move First From Vertical To End Of Horizontal</button>
+
+@code
+{
+    private Layout horizontal = default!;
+    private Layout vertical = default!;
+    private Layout initialComponentHolder = default!;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender) return;
+        while (initialComponentHolder.FirstChild is { } first)
+        {
+            horizontal.AddChildToEnd(first);
+            initialComponentHolder.RemoveChild(first);
+        }
+    }
+
+    public void MoveFirstFromHorizontalToStartOfVertical()
+    {
+        if (horizontal.FirstChild is {} first)
+        {
+            vertical.AddChildToStart(first);
+            horizontal.RemoveChild(first);
+        }
+    }
+
+    public void MoveFirstFromHorizontalToEndOfVertical()
+    {
+        if (horizontal.FirstChild is { } first)
+        {
+            vertical.AddChildToEnd(first);
+            horizontal.RemoveChild(first);
+        }
+    }
+
+    public void MoveFirstFromVerticalToStartOfHorizontal()
+    {
+        if (vertical.FirstChild is { } first)
+        {
+            horizontal.AddChildToStart(first);
+            vertical.RemoveChild(first);
+        }
+    }
+
+    public void MoveFirstFromVerticalToEndOfHorizontal()
+    {
+        if (vertical.FirstChild is { } first)
+        {
+            horizontal.AddChildToEnd(first);
+            vertical.RemoveChild(first);
+        }
+    }
+}
